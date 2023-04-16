@@ -6,12 +6,10 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from base.base_class import Base
+from selenium.common.exceptions import TimeoutException
 
 
-# login_standard_user = 'standard_user'
-# password_all = 'secret_sauce'
-# g = Service('chromedriver.exe')
-# driver = webdriver.Chrome(service='chromedriver.exe')
+
 
 class cartpage(Base):
 
@@ -21,61 +19,77 @@ class cartpage(Base):
         self.driver = driver
 
         # Locators
-        self.checkout = '//button[@id="checkout"]'
+        self.name_locator = '//input[@name="UNAME"]'
+        self.phone_locator = '//input[@name="UPHONE"]'
+        self.email_locator = '//input[@name="UEMAIL"]'
+        self.therminal_payment = "//input[@data-pay-way= '3']"
+        self.flat_locator = '//input[@name="FLAT"]'
+        self.submit = "//button[@class='VV23_Order_Submit_Button VV_Button _desktop-lg _tablet-lg _mobile-lg _block js-order-btn-submit js-hide-float-button']"
+        self.autorization_button_no = "//a[@class='VV_Button _tertiary _block _desktop-lg _tablet-lg _mobile-md js-order-nonauthed-go']"
 
-        
     # Getters
 
-    def get_checkout_button(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.checkout)))
+    def get_name_locator(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.name_locator)))
+    
+    def get_phone_locator(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.phone_locator)))
+    
+    def get_email_locator(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.email_locator)))
+    
+    def get_therminal_payment(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.therminal_payment)))
+    
+    def get_flat_locator(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.flat_locator)))
+    
+    def get_submit(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH ,  self.submit)))
+    
+    def get_allert_autorization(self):
+        try:
+            return WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH , self.autorization_button_no)))
+        except  TimeoutException: 
+            return 1
     
 
 
 
     # Actions
 
-    def click_chechout(self):
-        self.get_checkout_button().click()
-        print('checkout')
-
-
-
+    def post_name_locator(self,name):
+        self.get_name_locator().send_keys(name)
     
-    # Actions
+    def post_phone_locator(self,phone):
+        self.get_phone_locator().send_keys(phone)
 
-    def cart_actions(self):
-
-        self.get_current_url()
-        self.click_chechout()
- 
+    def post_email_locator(self, email):
+        self.get_email_locator().send_keys(email)
 
 
-class buy_page:
-    def __init__(self,driver):
-        self.path_product_name = driver.find_elements(By.XPATH, value = "//a//div")
-        self.path_product_price = driver.find_elements(By.XPATH, value ="//div[@class='inventory_item_price']")
-        self.button_add_to_cart = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH,"//button[@class='btn btn_primary btn_small btn_inventory']")))
-        self.elemet_massive = [self.path_product_name, self.path_product_price]
-        self.cart_button = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH,'//a[@class="shopping_cart_link"]')))
-        
+    def click_therminal_payment(self):
+        self.driver.execute_script("arguments[0].click();", self.get_therminal_payment())
 
-    def collecting_price_and_name(self, name):
-        dct = {}
-        data_massive = [[j.text for j in i]  for i in self.elemet_massive]
-        for i in range(len(data_massive[0])):
-            dct.setdefault(name, {})
-            dct[name].update({data_massive[0][i] : data_massive[1][i]})
 
-        return dct
+    def post_flat_locator(self, flat):
+        body = self.get_flat_locator()
+        body.send_keys(Keys.PAGE_DOWN)
+        body.send_keys(flat)
 
-    def add_goods_in_cart_by_page(self, name):
-        
-        
-        self.add_to_cart = driver.find_element(By.XPATH, value = f"//button[@id='add-to-cart-{name.replace(' ','-').lower()}']")
-        self.add_to_cart.click()
 
-    def go_to_cart(self):
-        self.cart_button.click()
+    def click_submit(self):
+        self.get_submit().click()
+
+    def pass_allert_autorization(self):
+        fun = self.get_allert_autorization()
+        if fun == 1:
+            return 1 
+        else:
+            return fun.click()
+
+
+
 
 
 

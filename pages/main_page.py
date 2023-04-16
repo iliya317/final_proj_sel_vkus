@@ -18,96 +18,34 @@ class mainpage(Base):
 
     def __init__(self,driver):
 
-        self.driver = driver
+        super().__init__(driver)
+        self.base_url = 'https://vkusvill.ru/'
+        self.driver.get(self.base_url)
+        self.driver.maximize_window()
+
 
         # Locators
-        self.product_1 = '//button[@id="add-to-cart-sauce-labs-backpack"]'
-        self.product_2 = '//button[@id="add-to-cart-sauce-labs-bike-light"]'
-        self.product_3 = '//button[@id="add-to-cart-sauce-labs-bolt-t-shirt"]'
-        self.cart = '//div[@id="shopping_cart_container"]'
-        self.check_in = '//input[@id="login-button"]'
-        self.check_word = '//span[@class="title"]'
-        self.extra_menu = '//button[@id="react-burger-menu-btn"]'
-        self.extra_menu_about = '//a[@id="about_sidebar_link"]'
+        self.button_catalog = '//a[@id="js-header-catalog-shower"]' #//div[@class="HeaderLevelProdsSet__Col _goods-link swiper-slide swiper-slide-active"]'
+
 
         
     # Getters
 
-    def get_product1_button(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.product_1)))
-    
-    def get_product2_button(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.product_2)))
-    
-    def get_product3_button(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.product_3)))
-    
-    def get_cart(self):
-        return  WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.cart)))
-    
-    def get_extra_menu(self):
-        return  WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.extra_menu)))
-
-    def get_extra_menu_about(self):
-        return  WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.extra_menu_about)))
-
+    def get_button_catalog(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.button_catalog)))
 
 
     # Actions
 
-    def add_product1_to_cart(self):
-        self.get_product1_button().click()
-        print('added the product 1')
-
-    def add_product2_to_cart(self):
-        self.get_product2_button().click()
-        print('added the product 2')
-
-    def add_product3_to_cart(self):
-        self.get_product3_button().click()
-        print('added the product 3')
-
-    def click_cart(self):
-        self.get_cart().click()
-        print('Go to the cart')
-    
-    def click_extra_menu(self):
-        self.get_extra_menu().click()
-
-    def click_extra_menu_about(self):
-        self.get_extra_menu_about().click()
-        
+    def go_to_catalog(self):
+        self.get_button_catalog().click()
+        print('went to catalog')
 
 
     
     # Actions
 
-    def select_product_1(self):
-
-        self.get_current_url()
-        self.add_product1_to_cart()
-        self.click_cart()
-
-
-    def select_product_2(self):
-
-        self.get_current_url()
-        self.add_product2_to_cart()
-        self.click_cart()
-
-
-    def select_product_3(self):
-
-        self.get_current_url()
-        self.add_product3_to_cart()
-        self.click_cart()
-
-    def select_menu_about(self):
-
-        self.get_current_url()
-        self.click_extra_menu()
-        self.click_extra_menu_about()
-        self.assert_url('https://saucelabs.com/')
+    
         
         
 

@@ -10,7 +10,6 @@ class Base():
 
     def get_current_url(self):
         get_url = self.driver.current_url
-        print("Current url " + get_url)
         return get_url
 
     """Method assert word"""
@@ -37,3 +36,17 @@ class Base():
         url = self.get_current_url()
         assert url == result
         print('Good url')
+
+        """Method uppend to the cart"""
+
+    def chosed_product(self, dct):
+        self.name_of_product = 'ss'
+        while  isinstance(self.name_of_product, str):
+            try:
+                self.name_of_product = int(input(F'Hi there!\nChoose the number which you want to buy:\n{dct}:\n'))
+            except KeyError:
+                print('chose id, which possible in the list')
+        
+        return self.name_of_product
+
+

@@ -22,30 +22,51 @@ class Payment(Base):
 
         # Locators
 
-        self.button_finish = '//button[@id="finish"]'   
+        self.button_good = "//a[@id='js-lk-modal-alert-btn-text']"
+        self.button_cancel_allert = "//button[@class='VV_Button _block _desktop-md _tablet-md _mobile-md']"
+        self.button_ok = '//a[@data-dismiss="modal"]'
+
+    def button_cancel_order(self, data):
+        return f"//a[@data-id='{data}']"
 
         
     # Getters
 
 
     
-    def get_button_finish(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.button_finish)))
+    def get_button_good(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.button_good)))
+    
+    def get_button_cancel_order(self,data):
+        return self.driver.find_element(By.XPATH , self.button_cancel_order(data))
+    
+    def get_button_cancel_allert(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.button_cancel_allert)))
+    
+    def get_button_ok(self):
+        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH , self.button_ok)))
 
 
 
     # Actions
 
 
-    def click_button_finish(self):
-        self.get_button_finish().click()
-        print('continue pressed')
+    def click_button_good(self):
+        self.get_button_good().click()
+        
 
+    def click_button_cancel_order(self):
+        order_id = Base(self.driver)
+        url = order_id.get_current_url()
+        self.driver.execute_script("arguments[0].click();", self.get_button_cancel_order(url[(url.find('=')+1): url.find('&')]))
+        
+
+    def click_button_ok(self):
+        self.get_button_ok().click()
+        
+    def click_button_cancel_allert(self):
+        self.get_button_cancel_allert().click()
 
     
-    # Actions
 
-    def finish_payment(self):
 
-        self.click_button_finish()
-        
